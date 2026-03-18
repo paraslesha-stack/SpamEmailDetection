@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spam Detector</title>
+</head>
+<body>
+
+<h2>Spam Email Detection</h2>
+
+<textarea id="message" rows="5" cols="40" placeholder="Enter message"></textarea>
+<br><br>
+
+<button onclick="checkSpam()">Check</button>
+
+<h3 id="result"></h3>
+
+<script>
+async function checkSpam() {
+    let msg = document.getElementById("message").value;
+
+    try {
+        let response = await fetch("http://127.0.0.1:5000/predict", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ message: msg })
+        });
+
+        let data = await response.json();
+        document.getElementById("result").innerText = data.result;
+
+    } catch (error) {
+        console.log(error);
+        document.getElementById("result").innerText = "Error connecting to server";
+    }
+}
+</script>
+
+</body>
+</html>

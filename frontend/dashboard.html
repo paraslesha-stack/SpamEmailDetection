@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4b91e2",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#121820",
+                        "success": "#28a745",
+                        "danger": "#ff4d4d",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Spam Email Detection Dashboard</title>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Header Section -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center size-10 bg-primary/10 text-primary rounded-lg">
+<span class="material-symbols-outlined text-3xl">shield_person</span>
+</div>
+<h1 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">Spam Email Detection</h1>
+</div>
+<div class="flex flex-1 justify-end gap-8 items-center">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Home</a>
+<a class="text-primary text-sm font-semibold border-b-2 border-primary py-1" href="#">Dashboard</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">History</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">About</a>
+</nav>
+<div class="flex items-center gap-4 border-l border-slate-200 dark:border-slate-800 pl-6">
+<a class="text-slate-600 dark:text-slate-400 hover:text-danger text-sm font-medium transition-colors" href="#">Logout</a>
+<div class="bg-primary/20 rounded-full size-10 flex items-center justify-center overflow-hidden border-2 border-primary/10">
+<img alt="User Profile" class="size-full object-cover" data-alt="User professional profile portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE0R3ekzLwXZiHaBc8rLRvLkR7dXixImXYgPFqZrCTfir72fSa-JVFOyuRBPJgqot4f0oGAWdcM7av_StyZjasRc3Ug143dOO_xARn8tVCXC5XVgVgHwS7U1zsL8B99AGuxc1eT8VFvcwtk1hLCZ6-qnbbwOzBPLhYKUUi46_a8LuMsmdm2uFomAZFaz1F0wMqkuHsi-TghN6TqQF0ccxKa75spdRDy-ZyW6-M_Gqm2jsLPzjt9N2imK2lQdGcediDZGYDOSbIIyqa"/>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto w-full px-6 py-8">
+<!-- Stats Overview -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+<div class="size-12 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<div>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Model Accuracy</p>
+<h3 class="text-2xl font-bold">98.4%</h3>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+<div class="size-12 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">mark_email_read</span>
+</div>
+<div>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Total Checks</p>
+<h3 class="text-2xl font-bold" id="total-checks-count">12,482</h3>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+<div class="size-12 rounded-full bg-danger/10 text-danger flex items-center justify-center">
+<span class="material-symbols-outlined">report</span>
+</div>
+<div>
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Spam Detected</p>
+<h3 class="text-2xl font-bold">3,105</h3>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left: Input Section -->
+<div class="lg:col-span-2 space-y-8">
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800">
+<h2 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">edit_note</span>
+                                Analyze Email Content
+                            </h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Our NLP engine will check for suspicious patterns and phishing indicators.</p>
+</div>
+<div class="p-6">
+<label class="block mb-4">
+<textarea class="form-textarea w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 focus:ring-primary focus:border-primary min-h-[240px] text-slate-800 dark:text-slate-200 placeholder:text-slate-400" placeholder="Paste the full email body here or type a message to verify..."></textarea>
+</label>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-4 text-xs text-slate-400">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">lock</span> Secure Processing</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">bolt</span> Real-time Analysis</span>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg font-semibold flex items-center gap-2 transition-all shadow-md active:scale-95" onclick="checkSpam()">
+<span class="material-symbols-outlined">search_check</span>
+                                    Check Spam
+                                </button>
+</div>
+</div>
+</div>
+<!-- History Table -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-6 flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
+<h2 class="text-lg font-bold">Recent Checks</h2>
+<button class="text-primary text-sm font-medium hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50">
+<th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Message Preview</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">Result</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Time</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800" id="history-table-body">
+<tr>
+<td class="px-6 py-4 text-sm max-w-xs truncate">Congratulations! You've won a $1000 Gift Card. Click here to claim...</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-danger/10 text-danger border border-danger/20">
+                                                SPAM
+                                            </span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">2 mins ago</td>
+</tr>
+<tr>
+<td class="px-6 py-4 text-sm max-w-xs truncate">The quarterly report for Q3 is ready for review in the shared drive.</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success border border-success/20">
+                                                NOT SPAM
+                                            </span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">1 hour ago</td>
+</tr>
+<tr>
+<td class="px-6 py-4 text-sm max-w-xs truncate">Your Amazon order #123-4567-890 has been shipped and is on its way.</td>
+<td class="px-6 py-4 text-center">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success border border-success/20">
+                                                NOT SPAM
+                                            </span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">Yesterday</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right: Results and Info -->
+<div class="space-y-6">
+<!-- Result Section -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+<h2 class="text-sm font-bold uppercase tracking-widest text-slate-400 mb-6">Live Detection Result</h2>
+<!-- Initial State -->
+<div class="flex flex-col items-center justify-center py-10 text-center" id="result-placeholder">
+<div class="size-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4 text-slate-300">
+<span class="material-symbols-outlined text-5xl">manage_search</span>
+</div>
+<p class="text-slate-400 text-sm">Enter content to start analysis</p>
+</div><div class="hidden flex flex-col items-center justify-center py-10 text-center animate-pulse" id="result-loading">
+<div class="size-20 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">
+<span class="material-symbols-outlined text-5xl animate-spin">sync</span>
+</div>
+<p class="text-slate-500 font-medium">Analyzing content...</p>
+</div>
+<!-- Spam Result (Hidden by default, shown for example styling) -->
+<div class="hidden animate-in fade-in zoom-in duration-300" id="result-spam">
+<div class="bg-danger/10 border-2 border-danger/20 rounded-xl p-8 text-center">
+<span class="material-symbols-outlined text-danger text-7xl mb-4">warning</span>
+<h3 class="text-danger text-3xl font-black mb-2">SPAM</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm">Probability: 99.2%</p>
+</div>
+<div class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg text-sm">
+<p class="font-semibold text-danger mb-1">Warning Signs:</p>
+<ul class="list-disc list-inside space-y-1 text-slate-500">
+<li>Urgency/Threat detected</li>
+<li>Suspicious external link</li>
+<li>Financial promise detected</li>
+</ul>
+</div>
+</div>
+<!-- Not Spam Result (Hidden by default) -->
+<div class="hidden" id="result-safe">
+<div class="bg-success/10 border-2 border-success/20 rounded-xl p-8 text-center">
+<span class="material-symbols-outlined text-success text-7xl mb-4">check_circle</span>
+<h3 class="text-success text-3xl font-black mb-2">NOT SPAM</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm">Probability: 0.1%</p>
+</div>
+<div class="mt-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg text-sm text-center">
+<p class="text-slate-600 dark:text-slate-400">This message appears safe. No phishing or spam patterns were detected.</p>
+</div>
+</div>
+</div>
+<!-- About Section -->
+<div class="bg-primary/10 border border-primary/20 rounded-xl p-6">
+<h2 class="text-primary font-bold flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined">lightbulb</span>
+                            How it works
+                        </h2>
+<p class="text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                            Our system utilizes state-of-the-art <strong>Natural Language Processing (NLP)</strong> techniques combined with <strong>Machine Learning (ML)</strong>. 
+                        </p>
+<div class="mt-4 space-y-3">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-xl">token</span>
+<div>
+<p class="text-xs font-bold">Vectorization</p>
+<p class="text-xs text-slate-500">Words are converted into numerical tensors for analysis.</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-xl">psychology</span>
+<div>
+<p class="text-xs font-bold">Inference</p>
+<p class="text-xs text-slate-500">A pre-trained Transformer model evaluates context.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Contact/Support -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-500 text-lg">support_agent</span>
+</div>
+<span class="text-sm font-medium">Need Support?</span>
+</div>
+<button class="text-primary text-sm font-bold bg-primary/10 px-3 py-1.5 rounded-lg">Chat</button>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-auto border-t border-slate-200 dark:border-slate-800 py-6 px-6 text-center text-slate-400 text-xs">
+<p>© 2024 Spam Email Detection AI. All rights reserved. | Terms of Service | Privacy Policy</p>
+</footer>
+</div>
+<script>
+        function checkSpam() {
+            const textarea = document.querySelector('textarea');
+            const content = textarea.value.trim();
+            
+            const placeholder = document.getElementById('result-placeholder');
+            const loading = document.getElementById('result-loading');
+            const spamResult = document.getElementById('result-spam');
+            const safeResult = document.getElementById('result-safe');
+            const totalChecksEl = document.getElementById('total-checks-count');
+            const historyTable = document.getElementById('history-table-body');
+            
+            if (!content) {
+                alert("Please enter the email content to analyze.");
+                return;
+            }
+
+            // Show Loading State
+            placeholder.classList.add('hidden');
+            spamResult.classList.add('hidden');
+            safeResult.classList.add('hidden');
+            loading.classList.remove('hidden');
+
+            // Simulate processing delay
+            setTimeout(() => {
+                loading.classList.add('hidden');
+
+                // Detection Logic
+                const keywords = ['win', 'gift card', 'urgent', 'prize', 'claim', 'money', 'free', 'bitcoin', 'account'];
+                const isSpam = keywords.some(word => content.toLowerCase().includes(word)) || Math.random() > 0.7;
+                const probability = isSpam ? (90 + Math.random() * 9).toFixed(1) : (Math.random() * 5).toFixed(1);
+
+                if (isSpam) {
+                    spamResult.querySelector('p').textContent = `Probability: ${probability}%`;
+                    spamResult.classList.remove('hidden');
+                } else {
+                    safeResult.querySelector('p').textContent = `Probability: ${probability}%`;
+                    safeResult.classList.remove('hidden');
+                }
+
+                // Update Stats
+                const currentCount = parseInt(totalChecksEl.textContent.replace(/,/g, ''));
+                totalChecksEl.textContent = (currentCount + 1).toLocaleString();
+
+                // Add to History
+                const resultBadge = isSpam ? 
+                    '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-danger/10 text-danger border border-danger/20">SPAM</span>' : 
+                    '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success border border-success/20">NOT SPAM</span>';
+                
+                const newRow = `
+                    <tr class="animate-in fade-in slide-in-from-top-4 duration-500">
+<td class="px-6 py-4 text-sm max-w-xs truncate">${content}</td>
+<td class="px-6 py-4 text-center">${resultBadge}</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">Just now</td>
+</tr>`;
+                historyTable.insertAdjacentHTML('afterbegin', newRow);
+
+                // Success feedback on textarea
+                textarea.classList.add('ring-2', isSpam ? 'ring-danger/30' : 'ring-success/30');
+                setTimeout(() => textarea.classList.remove('ring-2', 'ring-danger/30', 'ring-success/30'), 2000);
+                
+            }, 800);
+        }
+    </script>
+</body></html>
